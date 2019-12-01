@@ -29,7 +29,7 @@ CREATE TABLE `member_t` (
     `telephone` bigint(11) NOT NULL COMMENT '电话号码',
     `integral` int(11) DEFAULT 0 COMMENT '积分',
     `money` int(11) DEFAULT 0 COMMENT '开卡金额',
-    `payment_type` int(11) DEFAULT NULL COMMENT '支付方式',
+    `payment_type` int(4) DEFAULT NULL COMMENT '支付方式',
     `address` varchar(200) DEFAULT NULL COMMENT '会员地址',
     `create_by` varchar(50) DEFAULT NULL COMMENT '创建人',
     `creation_date` varchar(50) DEFAULT NULL COMMENT '创建时间',
