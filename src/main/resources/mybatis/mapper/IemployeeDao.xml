@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+
+
+<mapper namespace="com.xlt.myproject.mapper.IemployeeDao">
+
+    <select id="findEmployeeAll" resultType="com.xlt.myproject.model.Employee">
+         SELECT
+               emp_id as id,
+               emp_number  as number,
+               emp_name  as name,
+               emp_position as position,
+               emp_address address,
+               emp_telephone telephone
+          FROM employee_t et
+    </select>
+
+    <select id="findEmployeeByCondition" resultType="com.xlt.myproject.model.Employee">
+        SELECT
+               emp_id as id,
+               emp_number  as number,
+               emp_name  as name,
+               emp_position as position,
+               emp_address address,
+               emp_telephone telephone
+          FROM employee_t et
+          WHERE
+          1=1
+          <if test="id!=null">
+                AND et.emp_id=#{id}
+          </if>
+          <if test="number!=null">
+              AND et.emp_number=#{number}
+          </if>
+          <if test="name!=null">
+              AND et.emp_name=#{name}
+          </if>
+          <if test="position!=null">
+              AND et.emp_position=#{position}
+          </if>
+          <if test="address!=null">
+              AND et.emp_address=#{address}
+          </if>
+          <if test="telephone!=null">
+              AND et.emp_telephone=#{telephone}
+          </if>
+    </select>
+</mapper>
