@@ -4,6 +4,7 @@ import com.xlt.myproject.constant.Constant;
 import com.xlt.myproject.mapper.ImemberDao;
 import com.xlt.myproject.model.Member;
 import com.xlt.myproject.model.MemberResponse;
+import com.xlt.myproject.model.Page;
 import com.xlt.myproject.service.api.ImemberService;
 import org.apache.log4j.Logger;
 import org.mybatis.spring.annotation.MapperScan;
@@ -21,12 +22,17 @@ public class MemberServiceImpl implements ImemberService {
     @Autowired
     private ImemberDao memberDao;
     @Override
-    public MemberResponse findMemberPageList(Member member) {
+    public MemberResponse findMemberPageList(Member member, Page page) {
         MemberResponse response = new MemberResponse();
         logger.info("MemberServiceImpl.findMemberPageList input info:"+member);
         try{
-            List<Member> list = memberDao.findMemberPageList(member);
+            int totals = memberDao.findMemberPageListCount(member);
+            page.setTotal(totals);
+            int totalPages = page.getTotalPages();
+            logger.info("totalPages="+totalPages);
+            List<Member> list = memberDao.findMemberPageList(member,page);
             response.setResult(list);
+            response.setPage(page);
             response.setCode("success");
             response.setStatus(Constant.Status.SUCCESS);
             response.setMessage(list.size()+" member infos has found in this query.");

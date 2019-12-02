@@ -3,9 +3,18 @@
 
 <mapper namespace="com.xlt.myproject.mapper.ImemberDao">
     <select id="findMemberPageList" resultType="com.xlt.myproject.model.Member">
+        <bind name="key_offset" value="(page.currentPage-1)*page.pageSize"></bind>
         <include refid="findMemberBase"></include>
         <include refid="findMemberCondition"></include>
+        limit #{page.pageSize} offset #{key_offset}
     </select>
+
+
+    <select id="findMemberPageListCount" resultType="java.lang.Integer">
+        select count(0) from member_t t where 1=1
+        <include refid="findMemberCondition"></include>
+    </select>
+
     <sql id="findMemberBase">
         select t.id as id,
                t.card_number as cardNumber,
