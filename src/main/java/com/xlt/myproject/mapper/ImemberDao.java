@@ -28,4 +28,12 @@ public interface ImemberDao {
      * @throws ApplicationException 运行异常
      */
     int findMemberPageListCount(@Param("member") Member member)throws ApplicationException;
+
+    /**
+     * 更具ID删除
+     * @param id ID值
+     * @return 删除的条数
+     * @throws ApplicationException 异常
+     */
+    int deleteMemberById(@Param("id")int id) throws ApplicationException;
 }

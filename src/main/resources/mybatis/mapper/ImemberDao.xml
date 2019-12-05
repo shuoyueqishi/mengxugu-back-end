@@ -2,6 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 
 <mapper namespace="com.xlt.myproject.mapper.ImemberDao">
+    <delete id="deleteMemberById">
+        update member_t t
+        set t.delete_flag = 1
+        where t.id = #{id}
+    </delete>
     <select id="findMemberPageList" resultType="com.xlt.myproject.model.Member">
         <bind name="key_offset" value="(page.currentPage-1)*page.pageSize"></bind>
         <include refid="findMemberBase"></include>
@@ -9,9 +14,8 @@
         limit #{page.pageSize} offset #{key_offset}
     </select>
 
-
     <select id="findMemberPageListCount" resultType="java.lang.Integer">
-        select count(0) from member_t t where 1=1
+        select count(0) from member_t t
         <include refid="findMemberCondition"></include>
     </select>
 
@@ -30,9 +34,9 @@
                t.last_update_by as lastUpdateBy,
                t.last_update_date as lastUpdateDate
         from member_t t
-        where 1=1
     </sql>
     <sql id="findMemberCondition">
+        where t.delete_flag = 0
         <if test='member.cardNumber!=null and member.cardNumber!=""'>
             and t.card_number=#{member.cardNumber}
         </if>

@@ -25,4 +25,9 @@ public class MemberController {
         page.setCurrentPage(currentPage);
         return memberServiceImpl.findMemberPageList(member,page);
     }
+
+    @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE, produces="application/json")
+    public MemberResponse deleteMemberById(@PathVariable("id")int id) {
+        return memberServiceImpl.deleteMember(id);
+    }
 }

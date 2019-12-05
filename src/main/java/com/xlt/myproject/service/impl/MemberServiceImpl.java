@@ -21,6 +21,22 @@ public class MemberServiceImpl implements ImemberService {
 
     @Autowired
     private ImemberDao memberDao;
+
+    @Override
+    public MemberResponse deleteMember(int id) {
+        MemberResponse response = new MemberResponse();
+        try{
+            memberDao.deleteMemberById(id);
+            response.setMessage("Delete member by id: "+id+" successfully.");
+            response.setStatus(Constant.Status.SUCCESS);
+        }catch (ApplicationException e) {
+            logger.error("MemberServiceImpl.deleteMember encounter error:",e);
+            response.setMessage("Fail to delete member by id:"+id);
+            response.setStatus(Constant.Status.FAIL);
+        }
+        return response;
+    }
+
     @Override
     public MemberResponse findMemberPageList(Member member, Page page) {
         MemberResponse response = new MemberResponse();
