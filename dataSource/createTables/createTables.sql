@@ -31,6 +31,7 @@ CREATE TABLE `member_t` (
     `money` int(11) DEFAULT 0 COMMENT '开卡金额',
     `payment_type` int(4) DEFAULT NULL COMMENT '支付方式',
     `address` varchar(200) DEFAULT NULL COMMENT '会员地址',
+    `delete_flag` SMALLINT DEFAULT 0 COMMENT '删除标志，0:未删除，1：删除',
     `create_by` varchar(50) DEFAULT NULL COMMENT '创建人',
     `creation_date` varchar(50) DEFAULT NULL COMMENT '创建时间',
     `last_update_by` varchar(50) DEFAULT NULL COMMENT '修改人',

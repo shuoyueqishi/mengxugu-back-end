@@ -7,10 +7,7 @@ import com.xlt.myproject.service.api.ImemberService;
 import com.xlt.myproject.service.impl.MemberServiceImpl;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController(value="memberController")
 @RequestMapping("/member")
@@ -29,5 +26,15 @@ public class MemberController {
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE, produces="application/json")
     public MemberResponse deleteMemberById(@PathVariable("id")int id) {
         return memberServiceImpl.deleteMember(id);
+    }
+
+    @RequestMapping(value = "/update", method = RequestMethod.PUT, produces="application/json")
+    public MemberResponse updateMember(@RequestBody Member member) {
+        return memberServiceImpl.updateMember(member);
+    }
+
+    @RequestMapping(value = "/add", method = RequestMethod.POST, produces="application/json")
+    public MemberResponse addMember(@RequestBody()Member member) {
+        return memberServiceImpl.addNewMember(member);
     }
 }

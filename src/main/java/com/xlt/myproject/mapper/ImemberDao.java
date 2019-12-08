@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.omg.CORBA.portable.ApplicationException;
 import org.springframework.stereotype.Component;
+import sun.net.www.ApplicationLaunchException;
 
 import java.util.List;
 
@@ -36,4 +37,28 @@ public interface ImemberDao {
      * @throws ApplicationException 异常
      */
     int deleteMemberById(@Param("id")int id) throws ApplicationException;
+
+    /**
+     * 新增会员
+     * @param member 会员信息
+     * @return 返回新增数量
+     * @throws ApplicationException 异常
+     */
+    int addMember(@Param("member")Member member) throws ApplicationException;
+
+    /**
+     * 更新会员
+     * @param member 会员信息
+     * @return 返回更新数量
+     * @throws ApplicationException 异常
+     */
+    int updateMember(@Param("member")Member member) throws ApplicationException;
+
+    /**
+     * 根据会员卡号和姓名查询
+     * @param member 入参
+     * @return 返回符合条件的list
+     * @throws ApplicationException 异常
+     */
+    List<Member> findMemberByNumAndName(@Param("member")Member member) throws ApplicationException;
 }

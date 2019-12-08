@@ -11,7 +11,10 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.omg.CORBA.portable.ApplicationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
+import javax.security.auth.login.FailedLoginException;
 import java.util.List;
 
 @Service("memberService")
@@ -21,6 +24,52 @@ public class MemberServiceImpl implements ImemberService {
 
     @Autowired
     private ImemberDao memberDao;
+
+    @Override
+    public MemberResponse addNewMember(Member member) {
+        MemberResponse response = new MemberResponse();
+        if (StringUtils.isEmpty(member.getCardNumber()) || StringUtils.isEmpty(member.getName())) {
+            response.setStatus(Constant.Status.FAIL);
+            response.setMessage("Card Number and Name can't be empty.");
+            return response;
+        }
+        try {
+            List<Member> list = memberDao.findMemberByNumAndName(member);
+            if (CollectionUtils.isEmpty(list)) {
+                memberDao.addMember(member);
+                response.setStatus(Constant.Status.SUCCESS);
+                response.setMessage("Add new employee successfully.");
+            } else {
+                response.setStatus(Constant.Status.FAIL);
+                response.setMessage("Card Number:"+member.getCardNumber()+", Name:"+member.getName()+" has exist in the system.");
+            }
+        } catch (ApplicationException e) {
+            logger.error("Query database encounter error in addNewMember:",e);
+            response.setStatus(Constant.Status.FAIL);
+            response.setMessage("Query database encounter error in addNewMember");
+        }
+        return response;
+    }
+
+    @Override
+    public MemberResponse updateMember(Member member) {
+        MemberResponse response = new MemberResponse();
+        if (member.getId() == null) {
+            response.setStatus(Constant.Status.FAIL);
+            response.setMessage("Id can't be empty for updating member info.");
+            return response;
+        }
+        try {
+            memberDao.updateMember(member);
+            response.setMessage("update member info successfully.");
+            response.setStatus(Constant.Status.SUCCESS);
+        } catch(ApplicationException e) {
+            response.setStatus(Constant.Status.FAIL);
+            response.setMessage("update database encounter error.");
+            logger.error("update database encounter error:",e);
+        }
+        return response;
+    }
 
     @Override
     public MemberResponse deleteMember(int id) {

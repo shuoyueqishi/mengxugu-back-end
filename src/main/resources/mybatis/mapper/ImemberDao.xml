@@ -2,6 +2,99 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 
 <mapper namespace="com.xlt.myproject.mapper.ImemberDao">
+    <insert id="addOrUpdateMemberBatch">
+       <foreach collection="members" item="item" index="index" separator=";">
+           insert into member_t
+           (
+           card_number,
+           name,
+           birthday,
+           telephone,
+           integral,
+           money,
+           payment_type,
+           address,
+           delete_flag,
+           create_by,
+           creation_date,
+           last_update_by,
+           last_update_date
+           ) values
+           (
+           item.cardNumber,
+           item.name,
+           item.birthday,
+           item.telephone,
+           item.integral,
+           item.money,
+           item.paymentType,
+           item.address,
+            0,
+           item.createBy,
+            SYSDATE(),
+           item.lastUpdateBy,
+            SYSDATE()
+           )
+           on duplicate key update
+           (
+           birthday,
+           telephone,
+           integral,
+           money,
+           payment_type,
+           address,
+           last_update_by,
+           last_update_date
+           )
+       </foreach>
+    </insert>
+    <insert id="addMember">
+        insert into member_t
+        (
+            card_number,
+            name,
+            birthday,
+            telephone,
+            integral,
+            money,
+            payment_type,
+            address,
+            delete_flag,
+            create_by,
+            creation_date,
+            last_update_by,
+            last_update_date
+        ) values
+        (
+            #{member.cardNumber},
+            #{member.name},
+            #{member.birthday},
+            #{member.telephoneNumber},
+            #{member.integral},
+            #{member.money},
+            #{member.paymentType},
+            #{member.address},
+            0,
+            #{member.createBy},
+            SYSDATE(),
+            #{member.lastUpdateBy},
+            SYSDATE()
+        )
+    </insert>
+    <update id="updateMember">
+        update member_t
+        set
+            name = #{member.name},
+            birthday = #{member.birthday},
+            telephone = #{member.telephoneNumber},
+            integral = #{member.integral},
+            money = #{member.money},
+            payment_type = #{member.paymentType},
+            address = #{member.address},
+            last_update_by =  #{member.lastUpdateBy},
+            last_update_date =  SYSDATE()
+        where id = #{member.id}
+    </update>
     <delete id="deleteMemberById">
         update member_t t
         set t.delete_flag = 1
@@ -11,12 +104,19 @@
         <bind name="key_offset" value="(page.currentPage-1)*page.pageSize"></bind>
         <include refid="findMemberBase"></include>
         <include refid="findMemberCondition"></include>
-        limit #{page.pageSize} offset #{key_offset}
+        order by t.last_update_date desc
+        limit #{page.pageSize} offset #{key_offset};
     </select>
 
     <select id="findMemberPageListCount" resultType="java.lang.Integer">
         select count(0) from member_t t
         <include refid="findMemberCondition"></include>
+    </select>
+    <select id="findMemberByNumAndName" resultType="com.xlt.myproject.model.Member">
+        <include refid="findMemberBase"></include>
+        where t.delete_flag = 0
+         and  t.card_number = #{member.cardNumber}
+         and  t.name = #{member.name}
     </select>
 
     <sql id="findMemberBase">
