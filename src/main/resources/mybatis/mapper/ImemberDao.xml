@@ -2,52 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 
 <mapper namespace="com.xlt.myproject.mapper.ImemberDao">
-    <insert id="addOrUpdateMemberBatch">
-       <foreach collection="members" item="item" index="index" separator=";">
-           insert into member_t
-           (
-           card_number,
-           name,
-           birthday,
-           telephone,
-           integral,
-           money,
-           payment_type,
-           address,
-           delete_flag,
-           create_by,
-           creation_date,
-           last_update_by,
-           last_update_date
-           ) values
-           (
-           item.cardNumber,
-           item.name,
-           item.birthday,
-           item.telephone,
-           item.integral,
-           item.money,
-           item.paymentType,
-           item.address,
-            0,
-           item.createBy,
-            SYSDATE(),
-           item.lastUpdateBy,
-            SYSDATE()
-           )
-           on duplicate key update
-           (
-           birthday,
-           telephone,
-           integral,
-           money,
-           payment_type,
-           address,
-           last_update_by,
-           last_update_date
-           )
-       </foreach>
-    </insert>
     <insert id="addMember">
         insert into member_t
         (
@@ -137,6 +91,9 @@
     </sql>
     <sql id="findMemberCondition">
         where t.delete_flag = 0
+        <if test='member.id!=null and member.id!=""'>
+            and t.id=#{member.id}
+        </if>
         <if test='member.cardNumber!=null and member.cardNumber!=""'>
             and t.card_number=#{member.cardNumber}
         </if>
