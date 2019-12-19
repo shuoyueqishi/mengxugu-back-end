@@ -5,15 +5,16 @@ import java.util.List;
 import java.util.Objects;
 
 public class SupplierResponse extends BasicResponse implements Serializable {
-    private List<Supplier> list;
+    private static final long serialVersionUID = -8967824823827727183L;
+    private List<Supplier> result;
     private Page page;
 
-    public List<Supplier> getList() {
-        return list;
+    public List<Supplier> getResult() {
+        return result;
     }
 
-    public void setList(List<Supplier> list) {
-        this.list = list;
+    public void setResult(List<Supplier> result) {
+        this.result = result;
     }
 
     public Page getPage() {
@@ -30,19 +31,19 @@ public class SupplierResponse extends BasicResponse implements Serializable {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         SupplierResponse that = (SupplierResponse) o;
-        return Objects.equals(list, that.list) &&
+        return Objects.equals(result, that.result) &&
                 Objects.equals(page, that.page);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), list, page);
+        return Objects.hash(super.hashCode(), result, page);
     }
 
     @Override
     public String toString() {
         return "SupplierResponse{" +
-                "list=" + list +
+                "list=" + result +
                 ", page=" + page +
                 '}';
     }
