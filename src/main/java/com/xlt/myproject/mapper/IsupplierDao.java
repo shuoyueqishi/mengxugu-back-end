@@ -17,4 +17,5 @@ public interface IsupplierDao {
     int deleteSupplierById(@Param("id")Long id) throws ApplicationException;
     int updateSupplier(@Param("supplier")Supplier supplier)throws ApplicationException;
     int addSupplier(@Param("supplier")Supplier supplier)throws ApplicationException;
+    List<Supplier> findSupplierByCodeAndName(@Param("supplier")Supplier supplier)throws ApplicationException;
 }

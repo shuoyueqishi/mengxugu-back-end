@@ -11,6 +11,7 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.omg.CORBA.portable.ApplicationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 
@@ -47,16 +48,61 @@ public class SupplierServiceImpl implements IsupplierService {
 
     @Override
     public SupplierResponse deleteSupplierById(Long id) {
-        return null;
+        logger.info("SupplierServiceImpl.deleteSupplierById input id="+id);
+        SupplierResponse response = new SupplierResponse();
+        try {
+            supplierDao.deleteSupplierById(id);
+            response.setStatus(Constant.Status.SUCCESS);
+            response.setMessage("Delete supplier successfully whose id is "+id);
+        } catch (ApplicationException e) {
+            response.setStatus(Constant.Status.FAIL);
+            response.setMessage("Delete supplier failed whose id is "+id);
+            logger.error("Delete supplier failed whose id is "+id);
+            logger.error(e);
+        }
+        return response;
     }
 
     @Override
     public SupplierResponse addSupplier(Supplier supplier) {
-        return null;
+        logger.info("SupplierServiceImpl.addSupplier input info:"+supplier);
+        SupplierResponse response = new SupplierResponse();
+        try {
+            List<Supplier> list = supplierDao.findSupplierByCodeAndName(supplier);
+            if (!CollectionUtils.isEmpty(list)) {
+                logger.error("supplierCode:"+supplier.getCode()+",supplierName:"+supplier.getName()+" has existed in system. Don't add it again.");
+                response.setStatus(Constant.Status.FAIL);
+                response.setMessage("supplierCode:"+supplier.getCode()+",supplierName:"+supplier.getName()+" has existed in system. Don't add it again.");
+                return response;
+            }
+            int row  = supplierDao.addSupplier(supplier);
+            response.setStatus(Constant.Status.SUCCESS);
+            response.setMessage("Add supplier successfully. "+row+" Added");
+        } catch (ApplicationException e) {
+            logger.error("Add supplier failed, error info:",e);
+            response.setStatus(Constant.Status.FAIL);
+            response.setMessage("Add supplier failed.");
+        }
+        return response;
     }
 
     @Override
     public SupplierResponse updateSupplier(Supplier supplier) {
-        return null;
+        SupplierResponse response = new SupplierResponse();
+        if (supplier.getId() == null) {
+            response.setStatus(Constant.Status.FAIL);
+            response.setMessage("Id can't be empty for updating supplier info.");
+            return response;
+        }
+        try {
+            supplierDao.updateSupplier(supplier);
+            response.setMessage("update supplier info successfully.");
+            response.setStatus(Constant.Status.SUCCESS);
+        } catch(ApplicationException e) {
+            response.setStatus(Constant.Status.FAIL);
+            response.setMessage("update database encounter error.");
+            logger.error("update database encounter error:",e);
+        }
+        return response;
     }
 }

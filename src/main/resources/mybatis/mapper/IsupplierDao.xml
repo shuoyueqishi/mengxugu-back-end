@@ -2,7 +2,37 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 
 <mapper namespace="com.xlt.myproject.mapper.IsupplierDao">
-    <insert id="addSupplier"></insert>
+    <insert id="addSupplier">
+        insert into supplier_t
+         (
+          code,
+          name,
+          contact,
+          telephone,
+          email,
+          address,
+          remark,
+          valid_flag,
+          create_by,
+          creation_date,
+          last_update_by,
+          last_update_date
+          )
+         values (
+                    #{supplier.code},
+                    #{supplier.name},
+                    #{supplier.contact},
+                    #{supplier.telephone},
+                    #{supplier.email},
+                    #{supplier.address},
+                    #{supplier.remark},
+                    0,
+                    #{supplier.createBy},
+                    sysdate(),
+                    #{supplier.lastUpdateBy},
+                    sysdate()
+                )
+    </insert>
     <update id="updateSupplier">
         update supplier_t set code=#{supplier.code},
                                telephone=#{supplier.telephone},
@@ -12,8 +42,6 @@
                                contact=#{supplier.contact},
                                email=#{supplier.email},
                                remark=#{supplier.remark},
-                               create_by=#{supplier.createBy},
-                               creation_date=sysdate(),
                                last_update_date=sysdate(),
                                last_update_by=#{supplier.lastUpdateBy}
         where valid_flag=0 and id=#{supplier.id}
@@ -33,6 +61,17 @@
         select count(0) from supplier_t t
         <include refid="findSupplierCondition"></include>
     </select>
+    <select id="findSupplierByCodeAndName" resultType="com.xlt.myproject.model.Supplier">
+        <include refid="findSupplierBase"></include>
+        where t.valid_flag=0
+            <if test="supplier.code!=null">
+                and t.code = #{supplier.code}
+            </if>
+            <if test="supplier.name!=null">
+                and t.name = #{supplier.name}
+            </if>
+        order by t.last_update_date desc
+    </select>
     <sql id="findSupplierBase">
         select t.id as id,
                t.telephone as telephone,
@@ -50,6 +89,9 @@
     </sql>
     <sql id="findSupplierCondition">
         where t.valid_flag=0
+        <if test="supplier.id!=null">
+            and t.id = #{supplier.id}
+        </if>
         <if test="supplier.code!=null">
             and t.code = #{supplier.code}
         </if>
