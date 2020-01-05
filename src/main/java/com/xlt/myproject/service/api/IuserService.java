@@ -5,4 +5,5 @@ import com.xlt.myproject.model.UserResponse;
 
 public interface IuserService {
     UserResponse findUserByCondition(User user);
+    UserResponse updateUserPassword(User user);
 }

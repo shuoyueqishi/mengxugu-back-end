@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
 @Service("userService")
 @MapperScan("com.xlt.myproject.mapper")
 public class UserServiceImpl implements IuserService {
@@ -22,18 +23,34 @@ public class UserServiceImpl implements IuserService {
 
     @Override
     public UserResponse findUserByCondition(User user) {
-        logger.info("findUserByCondition input info: "+user);
-        UserResponse response=new UserResponse();
-        try{
-            List<User> users=userDao.findUserByCondition(user);
+        logger.info("findUserByCondition input info: " + user);
+        UserResponse response = new UserResponse();
+        try {
+            List<User> users = userDao.findUserByCondition(user);
             response.setResult(users);
             response.setStatus(Constant.Status.SUCCESS);
-            response.setMessage("findUserByCondition successfully, "+users.size()+" found");
-        }catch(ApplicationException e){
+            response.setMessage("findUserByCondition successfully, " + users.size() + " found");
+        } catch (ApplicationException e) {
             response.setStatus(Constant.Status.SUCCESS);
-            response.setMessage("findUserByCondition failed"+e.toString());
-            logger.error("findUserByCondition failed:"+e);
+            response.setMessage("findUserByCondition failed" + e.toString());
+            logger.error("findUserByCondition failed:" + e);
         }
         return response;
+    }
+
+    @Override
+    public UserResponse updateUserPassword(User user) {
+         logger.info("UserServiceImpl.updateUserPassword input info:"+user);
+         UserResponse response = new UserResponse();
+         try {
+             int rows = userDao.updateUserPassword(user);
+             response.setMessage("update user number["+user.getNumber()+"] successfully.");
+             response.setStatus(Constant.Status.SUCCESS);
+         } catch (ApplicationException e) {
+             response.setStatus(Constant.Status.FAIL);
+             response.setMessage("update user password failed.");
+             logger.error("update user password failed."+e);
+         }
+         return  response;
     }
 }

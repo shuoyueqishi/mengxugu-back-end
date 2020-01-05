@@ -19,14 +19,15 @@ import java.util.List;
 public class EmployeeServiceImpl implements EmployeeService, Serializable {
     @Autowired
     private IemployeeDao iemployeeDao;
+
     @Override
     public EmployeeResponse findAllEmployees() {
 
-        EmployeeResponse employeeResponse=new EmployeeResponse();
-        List<Employee> list=new ArrayList<>();
+        EmployeeResponse employeeResponse = new EmployeeResponse();
+        List<Employee> list = new ArrayList<>();
         try {
-            list= iemployeeDao.findEmployeeAll();
-            if(list.size()>0){
+            list = iemployeeDao.findEmployeeAll();
+            if (list.size() > 0) {
                 employeeResponse.setResult(list);
                 employeeResponse.setCode("200");
                 employeeResponse.setMessage("find all employees successfully.");
@@ -44,11 +45,11 @@ public class EmployeeServiceImpl implements EmployeeService, Serializable {
 
     @Override
     public EmployeeResponse findEmployees(Employee employee) {
-        EmployeeResponse employeeResponse=new EmployeeResponse();
-        List<Employee> list=new ArrayList<>();
+        EmployeeResponse employeeResponse = new EmployeeResponse();
+        List<Employee> list = new ArrayList<>();
         try {
-            list= iemployeeDao.findEmployeeByCondition(employee);
-            if(list.size()>0){
+            list = iemployeeDao.findEmployeeByCondition(employee);
+            if (list.size() > 0) {
                 employeeResponse.setResult(list);
                 employeeResponse.setCode("200");
                 employeeResponse.setMessage("find employee by condition successfully.");

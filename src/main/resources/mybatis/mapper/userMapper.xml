@@ -2,6 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 
 <mapper namespace="com.xlt.myproject.mapper.IuserDao">
+    <update id="updateUserPassword">
+        update user_t
+        set password=#{user.password}
+        where number=#{user.number}
+    </update>
 
     <select id="findUserByCondition" resultType="com.xlt.myproject.model.User">
         select

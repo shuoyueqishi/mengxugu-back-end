@@ -11,5 +11,6 @@ import java.util.List;
 @Mapper
 @Component(value="IuserDao")
 public interface IuserDao {
-    public List<User> findUserByCondition(@Param("user")User user) throws ApplicationException;
+    List<User> findUserByCondition(@Param("user") User user) throws ApplicationException;
+    int updateUserPassword(@Param("user") User user) throws ApplicationException;
 }
