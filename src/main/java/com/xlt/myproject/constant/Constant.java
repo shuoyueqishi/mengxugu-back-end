@@ -6,8 +6,6 @@ public class Constant {
 
         SUCCESS(1,"成功"),
         FAIL(2,"失败");
-
-      
         private final int value;
         private final String description;
 
